@@ -14,6 +14,6 @@ export class ChangePassword extends AwsCognitoTemplate {
       AccessToken: accessToken,
       PreviousPassword: oldPassword,
       ProposedPassword: newPassword,
-    }).promise();
+    });
   }
 }
