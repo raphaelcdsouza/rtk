@@ -17,6 +17,6 @@ export class ConfirmForgotPassword extends AwsCognitoTemplate {
       ConfirmationCode: code,
       Password: newPassword,
       SecretHash: secretHash!,
-    }).promise();
+    });
   }
 }
