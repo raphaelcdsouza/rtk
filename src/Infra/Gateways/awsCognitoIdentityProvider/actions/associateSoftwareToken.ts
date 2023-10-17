@@ -15,7 +15,7 @@ export class AssociateSoftwareToken extends AwsCognitoTemplate {
     const { SecretCode, Session } = await this.serviceInstance.associateSoftwareToken({
       Session: session,
       AccessToken: accessToken,
-    }).promise();
+    });
 
     return {
       publicKey: SecretCode!,
