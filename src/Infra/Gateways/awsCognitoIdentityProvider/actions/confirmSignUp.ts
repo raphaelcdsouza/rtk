@@ -15,6 +15,6 @@ export class ConfirmSignUp extends AwsCognitoTemplate {
       Username: username,
       ConfirmationCode: code,
       SecretHash: secretHash,
-    }).promise();
+    });
   }
 }

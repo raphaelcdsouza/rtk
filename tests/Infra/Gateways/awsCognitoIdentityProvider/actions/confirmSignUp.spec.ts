@@ -1,4 +1,4 @@
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { mock, MockProxy } from 'jest-mock-extended';
 
 import { ConfirmSignUp } from '../../../../../src/Infra/Gateways/awsCognitoIdentityProvider/actions';
@@ -14,8 +14,7 @@ jest.mock('../../../../../src/Utils/hash', () => ({
 type ExecuteInput = Omit<IConfirmSignUp.Input, 'username'>;
 
 describe('confirmSignup', () => {
-  let confirmSignUpPromiseSpy: jest.Mock;
-  let cognitoInterfaceMock: MockProxy<CognitoIdentityServiceProvider>;
+  let cognitoInterfaceMock: MockProxy<CognitoIdentityProvider>;
   let sut: ConfirmSignUp;
 
   const clientId = 'any_client_id';
@@ -24,11 +23,8 @@ describe('confirmSignup', () => {
   const username = 'any_user';
 
   beforeAll(() => {
-    confirmSignUpPromiseSpy = jest.fn();
     cognitoInterfaceMock = mock();
-    cognitoInterfaceMock.confirmSignUp.mockImplementation(jest.fn().mockImplementation(() => ({
-      promise: confirmSignUpPromiseSpy,
-    })));
+    cognitoInterfaceMock.confirmSignUp.mockImplementation(jest.fn().mockResolvedValue(undefined));
   });
 
   beforeEach(() => {
@@ -52,13 +48,6 @@ describe('confirmSignup', () => {
 
     expect(cognitoInterfaceMock.confirmSignUp).toHaveBeenCalledWith(confirmSignUpObject);
     expect(cognitoInterfaceMock.confirmSignUp).toHaveBeenCalledTimes(1);
-  });
-
-  it('should call "promise" with correct params', async () => {
-    await sut.execute<ExecuteInput>({ code: confirmationCode }, username);
-
-    expect(confirmSignUpPromiseSpy).toHaveBeenCalledWith();
-    expect(confirmSignUpPromiseSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should return nothing', async () => {
