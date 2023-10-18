@@ -1,4 +1,4 @@
-import { SignUpRequest } from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import { SignUpCommandInput } from '@aws-sdk/client-cognito-identity-provider';
 
 import { AwsCognitoTemplate } from '../../Templates/AWS';
 import { ISignUp } from '../../../Interfaces/Gateways';
@@ -13,7 +13,7 @@ export class SignUp extends AwsCognitoTemplate {
   }
 
   protected async performAction({ password, attributes }: ExecuteInput, username: string, secretHash?: string): Promise<ExecuteOutput> {
-    const signUpRequestObject: SignUpRequest = {
+    const signUpRequestObject: SignUpCommandInput = {
       ClientId: this.clientId,
       Username: username,
       Password: password,
@@ -24,10 +24,11 @@ export class SignUp extends AwsCognitoTemplate {
       signUpRequestObject.UserAttributes = attributes;
     }
 
-    const { UserSub } = await this.serviceInstance.signUp(signUpRequestObject).promise();
+    const { UserSub } = await this.serviceInstance.signUp(signUpRequestObject);
 
     return {
-      id: UserSub,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      id: UserSub!,
     };
   }
 }
