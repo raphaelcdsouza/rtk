@@ -1,4 +1,4 @@
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { mock, MockProxy } from 'jest-mock-extended';
 
 import { Login } from '../../../../../src/Infra/Gateways/awsCognitoIdentityProvider/actions';
@@ -15,8 +15,7 @@ type ExecuteInput = Omit<ILogin.Input, 'username'>;
 type ExecuteOutput = ILogin.Output;
 
 describe('login', () => {
-  let initiateAuthPromiseSpy: jest.Mock;
-  let cognitoInterfaceMock: MockProxy<CognitoIdentityServiceProvider>;
+  let cognitoInterfaceMock: MockProxy<CognitoIdentityProvider>;
   let sut: Login;
 
   const clientId = 'any_client_id';
@@ -34,7 +33,8 @@ describe('login', () => {
   const sub = 'any_sub';
 
   beforeAll(() => {
-    initiateAuthPromiseSpy = jest.fn().mockResolvedValue({
+    cognitoInterfaceMock = mock();
+    cognitoInterfaceMock.initiateAuth.mockImplementation(jest.fn().mockResolvedValue({
       AuthenticationResult: {
         AccessToken: accessToken,
         RefreshToken: refreshToken,
@@ -42,11 +42,7 @@ describe('login', () => {
         ExpiresIn: 3600,
         TokenType: tokenType,
       },
-    });
-    cognitoInterfaceMock = mock();
-    cognitoInterfaceMock.initiateAuth.mockImplementation(jest.fn().mockImplementation(() => ({
-      promise: initiateAuthPromiseSpy,
-    })));
+    }));
   });
 
   beforeEach(() => {
@@ -74,13 +70,6 @@ describe('login', () => {
     expect(cognitoInterfaceMock.initiateAuth).toHaveBeenCalledTimes(1);
   });
 
-  it('should call "promise" with correct params', async () => {
-    await sut.execute<ExecuteInput>({ password }, username);
-
-    expect(initiateAuthPromiseSpy).toHaveBeenCalledWith();
-    expect(initiateAuthPromiseSpy).toHaveBeenCalledTimes(1);
-  });
-
   it('should return correct data in case of login without MFA', async () => {
     const result = await sut.execute<ExecuteInput, ExecuteOutput>({ password }, username);
 
@@ -95,13 +84,13 @@ describe('login', () => {
   });
 
   it('should return correct data in case of login with MFA', async () => {
-    initiateAuthPromiseSpy.mockResolvedValueOnce({
+    cognitoInterfaceMock.initiateAuth.mockImplementation(jest.fn().mockResolvedValue({
       ChallengeName: challengeName,
       Session: session,
       ChallengeParameters: {
         USER_ID_FOR_SRP: sub,
       },
-    });
+    }));
 
     const result = await sut.execute<ExecuteInput, ExecuteOutput>({ password }, username);
 

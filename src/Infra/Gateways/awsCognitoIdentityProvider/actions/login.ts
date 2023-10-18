@@ -20,7 +20,7 @@ export class Login extends AwsCognitoTemplate {
         PASSWORD: password,
         SECRET_HASH: secretHash!,
       },
-    }).promise();
+    });
 
     if (result.AuthenticationResult !== undefined) {
       return {
