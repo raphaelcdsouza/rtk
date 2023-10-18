@@ -15,7 +15,7 @@ export class UpdateUserAttributes extends AwsCognitoTemplate {
     const { CodeDeliveryDetailsList } = await this.serviceInstance.updateUserAttributes({
       AccessToken: accessToken,
       UserAttributes: attributes,
-    }).promise();
+    });
 
     if (CodeDeliveryDetailsList !== undefined && CodeDeliveryDetailsList.length > 0) {
       return CodeDeliveryDetailsList.map(({ Destination, DeliveryMedium, AttributeName }) => ({
