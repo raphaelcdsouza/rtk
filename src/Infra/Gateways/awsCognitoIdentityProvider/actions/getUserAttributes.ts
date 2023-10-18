@@ -14,8 +14,8 @@ export class GetUserAttributes extends AwsCognitoTemplate {
   protected async performAction({ accessToken }: ExecuteInput): Promise<ExecuteOutput> {
     const { UserAttributes } = await this.serviceInstance.getUser({
       AccessToken: accessToken,
-    }).promise();
+    });
 
-    return UserAttributes;
+    return UserAttributes!;
   }
 }

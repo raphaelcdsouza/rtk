@@ -1,4 +1,4 @@
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { mock, MockProxy } from 'jest-mock-extended';
 
 import { GetUserAttributes } from '../../../../../src/Infra/Gateways/awsCognitoIdentityProvider/actions';
@@ -10,8 +10,7 @@ jest.mock('aws-sdk');
 type ExecuteInput = IGetUserAttributes.Input
 
 describe('getUser', () => {
-  let getUserAttributesPromiseSpy: jest.Mock;
-  let cognitoInterfaceMock: MockProxy<CognitoIdentityServiceProvider>;
+  let cognitoInterfaceMock: MockProxy<CognitoIdentityProvider>;
   let sut: GetUserAttributes;
 
   const clientId = 'any_client_id';
@@ -27,11 +26,8 @@ describe('getUser', () => {
   };
 
   beforeAll(() => {
-    getUserAttributesPromiseSpy = jest.fn().mockResolvedValue(getUserReturnObject);
     cognitoInterfaceMock = mock();
-    cognitoInterfaceMock.getUser.mockImplementation(jest.fn().mockImplementation(() => ({
-      promise: getUserAttributesPromiseSpy,
-    })));
+    cognitoInterfaceMock.getUser.mockImplementation(jest.fn().mockResolvedValue(getUserReturnObject));
   });
 
   beforeEach(() => {
@@ -51,13 +47,6 @@ describe('getUser', () => {
 
     expect(cognitoInterfaceMock.getUser).toHaveBeenCalledWith(getUserAttributsObject);
     expect(cognitoInterfaceMock.getUser).toHaveBeenCalledTimes(1);
-  });
-
-  it('should call "promise" with correct params', async () => {
-    await sut.execute<ExecuteInput>({ accessToken });
-
-    expect(getUserAttributesPromiseSpy).toHaveBeenCalledWith();
-    expect(getUserAttributesPromiseSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should return correct data', async () => {
