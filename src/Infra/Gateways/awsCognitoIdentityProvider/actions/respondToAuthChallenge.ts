@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { RespondToAuthChallengeRequest } from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import { RespondToAuthChallengeCommandInput, ChallengeNameType } from '@aws-sdk/client-cognito-identity-provider';
 
 import { AwsCognitoTemplate } from '../../Templates/AWS';
 import { IRespondToAuthChallenge } from '../../../Interfaces/Gateways';
@@ -14,8 +14,8 @@ export class RespondToAuthChallenge extends AwsCognitoTemplate {
   }
 
   protected async performAction({ name, session, responses: { mfaCode, newPassword } }: ExecuteInput, username: string, secretHash?: string): Promise<ExecuteOutput> {
-    const respondToAuthChallengeRequestObject: RespondToAuthChallengeRequest = {
-      ChallengeName: name,
+    const respondToAuthChallengeRequestObject: RespondToAuthChallengeCommandInput = {
+      ChallengeName: name as (typeof ChallengeNameType)[keyof typeof ChallengeNameType],
       ClientId: this.clientId,
       Session: session,
       ChallengeResponses: {
@@ -32,7 +32,7 @@ export class RespondToAuthChallenge extends AwsCognitoTemplate {
       respondToAuthChallengeRequestObject.ChallengeResponses!.NEW_PASSWORD = newPassword;
     }
 
-    const result = await this.serviceInstance.respondToAuthChallenge(respondToAuthChallengeRequestObject).promise();
+    const result = await this.serviceInstance.respondToAuthChallenge(respondToAuthChallengeRequestObject);
 
     return {
       authenticationData: {
