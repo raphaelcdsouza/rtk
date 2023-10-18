@@ -1,4 +1,4 @@
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { mock, MockProxy } from 'jest-mock-extended';
 
 import { RefreshToken } from '../../../../../src/Infra/Gateways/awsCognitoIdentityProvider/actions';
@@ -15,8 +15,7 @@ type ExecuteInput = Omit<IRefreshToken.Input, 'sub'>;
 type ExecuteOutput = IRefreshToken.Output;
 
 describe('login', () => {
-  let initiateAuthPromiseSpy: jest.Mock;
-  let cognitoInterfaceMock: MockProxy<CognitoIdentityServiceProvider>;
+  let cognitoInterfaceMock: MockProxy<CognitoIdentityProvider>;
   let sut: RefreshToken;
 
   const clientId = 'any_client_id';
@@ -30,18 +29,15 @@ describe('login', () => {
   const idToken = 'any_id_token';
 
   beforeAll(() => {
-    initiateAuthPromiseSpy = jest.fn().mockResolvedValue({
+    cognitoInterfaceMock = mock();
+    cognitoInterfaceMock.initiateAuth.mockImplementation(jest.fn().mockResolvedValue({
       AuthenticationResult: {
         AccessToken: accessToken,
         IdToken: idToken,
         ExpiresIn: 3600,
         TokenType: tokenType,
       },
-    });
-    cognitoInterfaceMock = mock();
-    cognitoInterfaceMock.initiateAuth.mockImplementation(jest.fn().mockImplementation(() => ({
-      promise: initiateAuthPromiseSpy,
-    })));
+    }));
   });
 
   beforeEach(() => {
@@ -66,13 +62,6 @@ describe('login', () => {
 
     expect(cognitoInterfaceMock.initiateAuth).toHaveBeenCalledWith(refreshTokenObject);
     expect(cognitoInterfaceMock.initiateAuth).toHaveBeenCalledTimes(1);
-  });
-
-  it('should call "promise" with correct params', async () => {
-    await sut.execute<ExecuteInput>({ refreshToken: refreshTokenInput }, sub);
-
-    expect(initiateAuthPromiseSpy).toHaveBeenCalledWith();
-    expect(initiateAuthPromiseSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should return correct data in case of login without MFA', async () => {

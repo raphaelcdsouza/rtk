@@ -19,7 +19,7 @@ export class RefreshToken extends AwsCognitoTemplate {
         REFRESH_TOKEN: refreshToken,
         SECRET_HASH: secretHash!,
       },
-    }).promise();
+    });
 
     return {
       tokenType: result.AuthenticationResult!.TokenType!,
