@@ -1,4 +1,4 @@
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { mock, MockProxy } from 'jest-mock-extended';
 
 import { DeleteUser } from '../../../../../src/Infra/Gateways/awsCognitoIdentityProvider/actions';
@@ -10,8 +10,7 @@ jest.mock('aws-sdk');
 type ExecuteInput = IDeleteUser.Input
 
 describe('associateSoftwareToken', () => {
-  let deleteUserPromiseSpy: jest.Mock;
-  let cognitoInterfaceMock: MockProxy<CognitoIdentityServiceProvider>;
+  let cognitoInterfaceMock: MockProxy<CognitoIdentityProvider>;
   let sut: DeleteUser;
 
   const clientId = 'any_client_id';
@@ -19,11 +18,8 @@ describe('associateSoftwareToken', () => {
   const accessToken = 'any_access_token';
 
   beforeAll(() => {
-    deleteUserPromiseSpy = jest.fn().mockResolvedValue({});
     cognitoInterfaceMock = mock();
-    cognitoInterfaceMock.deleteUser.mockImplementation(jest.fn().mockImplementation(() => ({
-      promise: deleteUserPromiseSpy,
-    })));
+    cognitoInterfaceMock.deleteUser.mockImplementation(jest.fn().mockResolvedValue({}));
   });
 
   beforeEach(() => {
@@ -43,13 +39,6 @@ describe('associateSoftwareToken', () => {
 
     expect(cognitoInterfaceMock.deleteUser).toHaveBeenCalledWith(deleteUserObject);
     expect(cognitoInterfaceMock.deleteUser).toHaveBeenCalledTimes(1);
-  });
-
-  it('should call "promise" with correct params', async () => {
-    await sut.execute<ExecuteInput>({ accessToken });
-
-    expect(deleteUserPromiseSpy).toHaveBeenCalledWith();
-    expect(deleteUserPromiseSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should return undefined', async () => {

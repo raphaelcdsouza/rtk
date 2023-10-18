@@ -13,6 +13,6 @@ export class DeleteUser extends AwsCognitoTemplate {
   protected async performAction({ accessToken }: ExecuteInput): Promise<void> {
     await this.serviceInstance.deleteUser({
       AccessToken: accessToken,
-    }).promise();
+    });
   }
 }
