@@ -1,4 +1,4 @@
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { mock, MockProxy } from 'jest-mock-extended';
 
 import { ForgotPassword } from '../../../../../src/Infra/Gateways/awsCognitoIdentityProvider/actions';
@@ -15,8 +15,7 @@ type ExecuteInput = undefined;
 type ExecuteOutput = IForgotPassword.Output;
 
 describe('associateSoftwareToken', () => {
-  let forgotPasswordPromiseSpy: jest.Mock;
-  let cognitoInterfaceMock: MockProxy<CognitoIdentityServiceProvider>;
+  let cognitoInterfaceMock: MockProxy<CognitoIdentityProvider>;
   let sut: ForgotPassword;
 
   const clientId = 'any_client_id';
@@ -29,17 +28,14 @@ describe('associateSoftwareToken', () => {
   const attribute = 'any_attribute';
 
   beforeAll(() => {
-    forgotPasswordPromiseSpy = jest.fn().mockResolvedValue({
+    cognitoInterfaceMock = mock();
+    cognitoInterfaceMock.forgotPassword.mockImplementation(jest.fn().mockResolvedValue({
       CodeDeliveryDetails: {
         Destination: destination,
         DeliveryMedium: deliveryMethod,
         AttributeName: attribute,
       },
-    });
-    cognitoInterfaceMock = mock();
-    cognitoInterfaceMock.forgotPassword.mockImplementation(jest.fn().mockImplementation(() => ({
-      promise: forgotPasswordPromiseSpy,
-    })));
+    }));
   });
 
   beforeEach(() => {
@@ -60,13 +56,6 @@ describe('associateSoftwareToken', () => {
 
     expect(cognitoInterfaceMock.forgotPassword).toHaveBeenCalledWith(forgotPasswordObject);
     expect(cognitoInterfaceMock.forgotPassword).toHaveBeenCalledTimes(1);
-  });
-
-  it('should call "promise" with correct params', async () => {
-    await sut.execute<ExecuteInput>(undefined, username);
-
-    expect(forgotPasswordPromiseSpy).toHaveBeenCalledWith();
-    expect(forgotPasswordPromiseSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should return correct data', async () => {

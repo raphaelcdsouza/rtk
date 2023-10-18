@@ -16,7 +16,7 @@ export class ForgotPassword extends AwsCognitoTemplate {
       ClientId: this.clientId,
       Username: username,
       SecretHash: secretHash!,
-    }).promise();
+    });
 
     return {
       destination: CodeDeliveryDetails!.Destination!,
