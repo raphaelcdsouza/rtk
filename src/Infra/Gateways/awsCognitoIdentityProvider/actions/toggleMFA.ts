@@ -16,6 +16,6 @@ export class ToggleMFA extends AwsCognitoTemplate {
         Enabled: enabled,
         PreferredMfa: enabled ? preferred : false,
       },
-    }).promise();
+    });
   }
 }
