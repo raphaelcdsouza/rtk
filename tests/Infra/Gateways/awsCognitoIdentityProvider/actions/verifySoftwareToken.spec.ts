@@ -1,4 +1,4 @@
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { mock, MockProxy } from 'jest-mock-extended';
 
 import { VerifySoftwareToken } from '../../../../../src/Infra/Gateways/awsCognitoIdentityProvider/actions';
@@ -11,8 +11,7 @@ type ExecuteInput = IVerifySoftwareToken.Input;
 type ExecuteOutput = IVerifySoftwareToken.Output;
 
 describe('verifySoftwareToken', () => {
-  let verifySoftwareTokenPromiseSpy: jest.Mock;
-  let cognitoInterfaceMock: MockProxy<CognitoIdentityServiceProvider>;
+  let cognitoInterfaceMock: MockProxy<CognitoIdentityProvider>;
   let sut: VerifySoftwareToken;
 
   const clientId = 'any_client_id';
@@ -25,14 +24,11 @@ describe('verifySoftwareToken', () => {
   const outputSession = 'any_output_session';
 
   beforeAll(() => {
-    verifySoftwareTokenPromiseSpy = jest.fn().mockResolvedValue({
+    cognitoInterfaceMock = mock();
+    cognitoInterfaceMock.verifySoftwareToken.mockImplementation(jest.fn().mockResolvedValue({
       Status: status,
       Session: outputSession,
-    });
-    cognitoInterfaceMock = mock();
-    cognitoInterfaceMock.verifySoftwareToken.mockImplementation(jest.fn().mockImplementation(() => ({
-      promise: verifySoftwareTokenPromiseSpy,
-    })));
+    }));
   });
 
   beforeEach(() => {
@@ -82,9 +78,9 @@ describe('verifySoftwareToken', () => {
     });
 
     it('should return status', async () => {
-      verifySoftwareTokenPromiseSpy.mockResolvedValueOnce({
+      cognitoInterfaceMock.verifySoftwareToken.mockImplementationOnce(jest.fn().mockResolvedValue({
         Status: status,
-      });
+      }));
 
       const result = await sut.execute<ExecuteInput, ExecuteOutput>({ accessToken, mfaCode });
 
@@ -92,12 +88,5 @@ describe('verifySoftwareToken', () => {
         status,
       });
     });
-  });
-
-  it('should call "promise" with correct params', async () => {
-    await sut.execute<ExecuteInput>({ session: inputSession, mfaCode });
-
-    expect(verifySoftwareTokenPromiseSpy).toHaveBeenCalledWith();
-    expect(verifySoftwareTokenPromiseSpy).toHaveBeenCalledTimes(1);
   });
 });

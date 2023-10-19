@@ -16,7 +16,7 @@ export class VerifySoftwareToken extends AwsCognitoTemplate {
       Session: session,
       AccessToken: accessToken,
       UserCode: mfaCode,
-    }).promise();
+    });
 
     return {
       status: Status!,
