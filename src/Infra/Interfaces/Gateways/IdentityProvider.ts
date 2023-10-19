@@ -1,5 +1,5 @@
 type AttributesType = {
-  Name: string,
+  Name: string | undefined,
   Value?: string,
 }
 
