@@ -14,6 +14,6 @@ export class VerifyUserAttribute extends AwsCognitoTemplate {
       AccessToken: accessToken,
       AttributeName: attribute,
       Code: code,
-    }).promise();
+    });
   }
 }

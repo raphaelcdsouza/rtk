@@ -1,4 +1,4 @@
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { mock, MockProxy } from 'jest-mock-extended';
 
 import { VerifyUserAttribute } from '../../../../../src/Infra/Gateways/awsCognitoIdentityProvider/actions';
@@ -10,8 +10,7 @@ jest.mock('aws-sdk');
 type ExecuteInput = IVerifyUserAttribute.Input;
 
 describe('associateSoftwareToken', () => {
-  let verifyUserAttributePromiseSpy: jest.Mock;
-  let cognitoInterfaceMock: MockProxy<CognitoIdentityServiceProvider>;
+  let cognitoInterfaceMock: MockProxy<CognitoIdentityProvider>;
   let sut: VerifyUserAttribute;
 
   const clientId = 'any_client_id';
@@ -21,11 +20,8 @@ describe('associateSoftwareToken', () => {
   const code = 'any_code';
 
   beforeAll(() => {
-    verifyUserAttributePromiseSpy = jest.fn().mockResolvedValue({});
     cognitoInterfaceMock = mock();
-    cognitoInterfaceMock.verifyUserAttribute.mockImplementation(jest.fn().mockImplementation(() => ({
-      promise: verifyUserAttributePromiseSpy,
-    })));
+    cognitoInterfaceMock.verifyUserAttribute.mockImplementation(jest.fn().mockResolvedValue({}));
   });
 
   beforeEach(() => {
@@ -47,13 +43,6 @@ describe('associateSoftwareToken', () => {
 
     expect(cognitoInterfaceMock.verifyUserAttribute).toHaveBeenCalledWith(verifyUserAttributeObject);
     expect(cognitoInterfaceMock.verifyUserAttribute).toHaveBeenCalledTimes(1);
-  });
-
-  it('should call "promise" with correct params', async () => {
-    await sut.execute<ExecuteInput>({ accessToken, attribute, code });
-
-    expect(verifyUserAttributePromiseSpy).toHaveBeenCalledWith();
-    expect(verifyUserAttributePromiseSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should return undefined', async () => {
