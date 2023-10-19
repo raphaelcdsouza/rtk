@@ -1,4 +1,3 @@
-// import mysql from 'mysql2';
 import { Pool, RowDataPacket, createPool } from 'mysql2/promise';
 
 import { ISQLDatabase } from '../Interfaces/DB';
