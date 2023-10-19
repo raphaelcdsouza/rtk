@@ -5,8 +5,6 @@ import { DeleteUser } from '../../../../../src/Infra/Gateways/awsCognitoIdentity
 import { AwsCognitoTemplate } from '../../../../../src/Infra/Gateways/Templates/AWS';
 import { IDeleteUser } from '../../../../../src';
 
-jest.mock('aws-sdk');
-
 type ExecuteInput = IDeleteUser.Input
 
 describe('associateSoftwareToken', () => {

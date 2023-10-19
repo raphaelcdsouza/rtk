@@ -5,8 +5,6 @@ import { Login } from '../../../../../src/Infra/Gateways/awsCognitoIdentityProvi
 import { AwsCognitoTemplate } from '../../../../../src/Infra/Gateways/Templates/AWS';
 import { ILogin } from '../../../../../src/Infra/Interfaces/Gateways';
 
-jest.mock('aws-sdk');
-
 jest.mock('../../../../../src/Utils/hash', () => ({
   awsCognitoSecretHash: jest.fn().mockReturnValue('any_secret_hash'),
 }));
@@ -84,7 +82,7 @@ describe('login', () => {
   });
 
   it('should return correct data in case of login with MFA', async () => {
-    cognitoInterfaceMock.initiateAuth.mockImplementation(jest.fn().mockResolvedValue({
+    cognitoInterfaceMock.initiateAuth.mockImplementationOnce(jest.fn().mockResolvedValue({
       ChallengeName: challengeName,
       Session: session,
       ChallengeParameters: {

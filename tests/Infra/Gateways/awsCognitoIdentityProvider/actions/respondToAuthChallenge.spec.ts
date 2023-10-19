@@ -5,8 +5,6 @@ import { RespondToAuthChallenge } from '../../../../../src/Infra/Gateways/awsCog
 import { AwsCognitoTemplate } from '../../../../../src/Infra/Gateways/Templates/AWS';
 import { IRespondToAuthChallenge } from '../../../../../src/Infra/Interfaces/Gateways';
 
-jest.mock('aws-sdk');
-
 jest.mock('../../../../../src/Utils/hash', () => ({
   awsCognitoSecretHash: jest.fn().mockReturnValue('any_secret_hash'),
 }));

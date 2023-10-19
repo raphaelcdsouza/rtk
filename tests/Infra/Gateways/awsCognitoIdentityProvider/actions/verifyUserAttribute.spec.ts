@@ -5,8 +5,6 @@ import { VerifyUserAttribute } from '../../../../../src/Infra/Gateways/awsCognit
 import { AwsCognitoTemplate } from '../../../../../src/Infra/Gateways/Templates/AWS';
 import { IVerifyUserAttribute } from '../../../../../src';
 
-jest.mock('aws-sdk');
-
 type ExecuteInput = IVerifyUserAttribute.Input;
 
 describe('associateSoftwareToken', () => {

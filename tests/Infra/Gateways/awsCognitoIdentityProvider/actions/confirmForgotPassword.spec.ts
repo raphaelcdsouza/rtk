@@ -5,8 +5,6 @@ import { ConfirmForgotPassword } from '../../../../../src/Infra/Gateways/awsCogn
 import { AwsCognitoTemplate } from '../../../../../src/Infra/Gateways/Templates/AWS';
 import { IConfirmForgotPassword } from '../../../../../src';
 
-jest.mock('aws-sdk');
-
 jest.mock('../../../../../src/Utils/hash', () => ({
   awsCognitoSecretHash: jest.fn().mockReturnValue('any_secret_hash'),
 }));

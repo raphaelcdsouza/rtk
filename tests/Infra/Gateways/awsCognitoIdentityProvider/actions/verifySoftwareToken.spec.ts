@@ -5,8 +5,6 @@ import { VerifySoftwareToken } from '../../../../../src/Infra/Gateways/awsCognit
 import { AwsCognitoTemplate } from '../../../../../src/Infra/Gateways/Templates/AWS';
 import { IVerifySoftwareToken } from '../../../../../src/Infra/Interfaces/Gateways';
 
-jest.mock('aws-sdk');
-
 type ExecuteInput = IVerifySoftwareToken.Input;
 type ExecuteOutput = IVerifySoftwareToken.Output;
 

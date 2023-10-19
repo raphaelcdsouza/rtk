@@ -5,8 +5,6 @@ import { UpdateUserAttributes } from '../../../../../src/Infra/Gateways/awsCogni
 import { AwsCognitoTemplate } from '../../../../../src/Infra/Gateways/Templates/AWS';
 import { IUpdateUserAttributes } from '../../../../../src';
 
-jest.mock('aws-sdk');
-
 type ExecuteInput = IUpdateUserAttributes.Input;
 type ExecuteOutput = IUpdateUserAttributes.Output;
 
@@ -57,7 +55,7 @@ describe('associateSoftwareToken', () => {
 
   describe('updating user attributes that needs verification', () => {
     it('should return destination, delivery method and the name of the modified attribute', async () => {
-      cognitoInterfaceMock.updateUserAttributes.mockImplementation(jest.fn().mockResolvedValue({
+      cognitoInterfaceMock.updateUserAttributes.mockImplementationOnce(jest.fn().mockResolvedValue({
         CodeDeliveryDetailsList: [
           {
             AttributeName: 'any_attribute',

@@ -5,8 +5,6 @@ import { GetUserAttributes } from '../../../../../src/Infra/Gateways/awsCognitoI
 import { AwsCognitoTemplate } from '../../../../../src/Infra/Gateways/Templates/AWS';
 import { IGetUserAttributes } from '../../../../../src';
 
-jest.mock('aws-sdk');
-
 type ExecuteInput = IGetUserAttributes.Input
 
 describe('getUser', () => {

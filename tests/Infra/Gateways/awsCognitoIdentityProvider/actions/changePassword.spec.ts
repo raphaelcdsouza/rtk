@@ -5,8 +5,6 @@ import { ChangePassword } from '../../../../../src/Infra/Gateways/awsCognitoIden
 import { AwsCognitoTemplate } from '../../../../../src/Infra/Gateways/Templates/AWS';
 import { IChangePassword } from '../../../../../src';
 
-jest.mock('aws-sdk');
-
 type ExecuteInput = IChangePassword.Input;
 
 describe('associateSoftwareToken', () => {

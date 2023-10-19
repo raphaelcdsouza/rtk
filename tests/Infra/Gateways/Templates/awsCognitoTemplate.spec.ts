@@ -6,8 +6,6 @@ import { IdentityProviderError } from '../../../../src/Errors';
 import { awsCognitoSecretHash } from '../../../../src/Utils';
 import { awsErrorMapper } from '../../../../src/Utils/Gateways/Error';
 
-jest.mock('aws-sdk');
-
 jest.mock('../../../../src/Errors', () => ({
   IdentityProviderError: jest.fn(),
 }));

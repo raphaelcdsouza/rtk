@@ -5,7 +5,7 @@ import { ToggleMFA } from '../../../../../src/Infra/Gateways/awsCognitoIdentityP
 import { AwsCognitoTemplate } from '../../../../../src/Infra/Gateways/Templates/AWS';
 import { IToggleMFA } from '../../../../../src';
 
-jest.mock('aws-sdk');
+jest.mock('@aws-sdk/client-cognito-identity-provider');
 
 type ExecuteInput = IToggleMFA.Input;
 

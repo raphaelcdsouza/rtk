@@ -5,8 +5,6 @@ import { AssociateSoftwareToken } from '../../../../../src/Infra/Gateways/awsCog
 import { AwsCognitoTemplate } from '../../../../../src/Infra/Gateways/Templates/AWS';
 import { IAssociateSoftwareToken } from '../../../../../src/Infra/Interfaces/Gateways';
 
-jest.mock('aws-sdk');
-
 type ExecuteInput = IAssociateSoftwareToken.Input;
 type ExecuteOutput = IAssociateSoftwareToken.Output;
 
