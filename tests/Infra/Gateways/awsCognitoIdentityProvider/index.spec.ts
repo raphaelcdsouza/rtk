@@ -1,9 +1,9 @@
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 import { AwsCognitoIdentityProvider } from '../../../../src';
 import * as Actions from '../../../../src/Infra/Gateways/awsCognitoIdentityProvider/actions';
 
-jest.mock('aws-sdk');
+jest.mock('@aws-sdk/client-cognito-identity-provider');
 jest.mock('../../../../src/Infra/Gateways/awsCognitoIdentityProvider/actions');
 
 describe('awsCognitoIdentityProvider', () => {
@@ -21,25 +21,25 @@ describe('awsCognitoIdentityProvider', () => {
     });
   });
 
-  it('should call "CognitoIdentityServiceProvider" with correct params', () => {
+  it('should call "CognitoIdentityProvider" with correct params', () => {
     expect(sut).toBeDefined();
-    expect(CognitoIdentityServiceProvider).toHaveBeenCalledWith({
+    expect(CognitoIdentityProvider).toHaveBeenCalledWith({
       region,
       credentials: {
         accessKeyId,
         secretAccessKey,
       },
     });
-    expect(CognitoIdentityServiceProvider).toHaveBeenCalledTimes(1);
+    expect(CognitoIdentityProvider).toHaveBeenCalledTimes(1);
   });
 
-  it('should call "CognitoIdentityServiceProvider" with correct params - without credentials object', () => {
+  it('should call "CognitoIdentityProvider" with correct params - without credentials object', () => {
     const alternativeSut = new AwsCognitoIdentityProvider({
       region, clientId,
     });
 
     expect(alternativeSut).toBeDefined();
-    expect(CognitoIdentityServiceProvider).toHaveBeenCalledWith({
+    expect(CognitoIdentityProvider).toHaveBeenCalledWith({
       region,
     });
   });
@@ -75,7 +75,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "SignUp" action with correct params - without "clientSecret"', async () => {
         await sut.signUp({ username, password, attributes });
 
-        expect(Actions.SignUp).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret: undefined });
+        expect(Actions.SignUp).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret: undefined });
         expect(Actions.SignUp).toHaveBeenCalledTimes(1);
       });
 
@@ -86,7 +86,7 @@ describe('awsCognitoIdentityProvider', () => {
 
         await optionalSut.signUp({ username, password, attributes });
 
-        expect(Actions.SignUp).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.SignUp).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.SignUp).toHaveBeenCalledTimes(1);
       });
     });
@@ -135,7 +135,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "ConfirmSignUp" action with correct params - without "clientSecret"', async () => {
         await sut.confirmSignUp({ username, code });
 
-        expect(Actions.ConfirmSignUp).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret: undefined });
+        expect(Actions.ConfirmSignUp).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret: undefined });
         expect(Actions.ConfirmSignUp).toHaveBeenCalledTimes(1);
       });
 
@@ -146,7 +146,7 @@ describe('awsCognitoIdentityProvider', () => {
 
         await optionalSut.confirmSignUp({ username, code });
 
-        expect(Actions.ConfirmSignUp).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.ConfirmSignUp).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.ConfirmSignUp).toHaveBeenCalledTimes(1);
       });
     });
@@ -200,7 +200,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "ResendSignUpConfirmationCode" action with correct params - without "clientSecret"', async () => {
         await sut.resendSignUpConfirmationCode({ username });
 
-        expect(Actions.ResendSignUpConfirmationCode).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider) });
+        expect(Actions.ResendSignUpConfirmationCode).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider) });
         expect(Actions.ResendSignUpConfirmationCode).toHaveBeenCalledTimes(1);
       });
 
@@ -211,7 +211,7 @@ describe('awsCognitoIdentityProvider', () => {
 
         await optionalSut.resendSignUpConfirmationCode({ username });
 
-        expect(Actions.ResendSignUpConfirmationCode).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.ResendSignUpConfirmationCode).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.ResendSignUpConfirmationCode).toHaveBeenCalledTimes(1);
       });
     });
@@ -282,7 +282,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "Login" action with correct params - without "clientSecret"', async () => {
         await sut.login({ username, password });
 
-        expect(Actions.Login).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret: undefined });
+        expect(Actions.Login).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret: undefined });
         expect(Actions.Login).toHaveBeenCalledTimes(1);
       });
 
@@ -293,7 +293,7 @@ describe('awsCognitoIdentityProvider', () => {
 
         await optionalSut.login({ username, password });
 
-        expect(Actions.Login).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.Login).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.Login).toHaveBeenCalledTimes(1);
       });
     });
@@ -360,7 +360,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "AssociateSoftwareToken" action with correct params - without "clientSecret"', async () => {
         await sut.associateSoftwareToken({ session, accessToken });
 
-        expect(Actions.AssociateSoftwareToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret: undefined });
+        expect(Actions.AssociateSoftwareToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret: undefined });
         expect(Actions.AssociateSoftwareToken).toHaveBeenCalledTimes(1);
       });
 
@@ -371,7 +371,7 @@ describe('awsCognitoIdentityProvider', () => {
 
         await optionalSut.associateSoftwareToken({ session, accessToken });
 
-        expect(Actions.AssociateSoftwareToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.AssociateSoftwareToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.AssociateSoftwareToken).toHaveBeenCalledTimes(1);
       });
     });
@@ -440,7 +440,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "VerifySoftwareToken" action with correct params - without "clientSecret"', async () => {
         await sut.verifySoftwareToken({ session, accessToken, mfaCode });
 
-        expect(Actions.VerifySoftwareToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret: undefined });
+        expect(Actions.VerifySoftwareToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret: undefined });
         expect(Actions.VerifySoftwareToken).toHaveBeenCalledTimes(1);
       });
 
@@ -451,7 +451,7 @@ describe('awsCognitoIdentityProvider', () => {
 
         await optionalSut.verifySoftwareToken({ session, accessToken, mfaCode });
 
-        expect(Actions.VerifySoftwareToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.VerifySoftwareToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.VerifySoftwareToken).toHaveBeenCalledTimes(1);
       });
     });
@@ -544,7 +544,7 @@ describe('awsCognitoIdentityProvider', () => {
           name, session, username, responses,
         });
 
-        expect(Actions.RespondToAuthChallenge).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret: undefined });
+        expect(Actions.RespondToAuthChallenge).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret: undefined });
         expect(Actions.RespondToAuthChallenge).toHaveBeenCalledTimes(1);
       });
 
@@ -557,7 +557,7 @@ describe('awsCognitoIdentityProvider', () => {
           name, session, username, responses,
         });
 
-        expect(Actions.RespondToAuthChallenge).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.RespondToAuthChallenge).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.RespondToAuthChallenge).toHaveBeenCalledTimes(1);
       });
     });
@@ -639,7 +639,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "UpdateUserAttributes" action with correct params - without "clientSecret"', async () => {
         await sut.updateUserAttributes({ accessToken, attributes });
 
-        expect(Actions.UpdateUserAttributes).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret: undefined });
+        expect(Actions.UpdateUserAttributes).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret: undefined });
         expect(Actions.UpdateUserAttributes).toHaveBeenCalledTimes(1);
       });
 
@@ -650,7 +650,7 @@ describe('awsCognitoIdentityProvider', () => {
 
         await optionalSut.updateUserAttributes({ accessToken, attributes });
 
-        expect(Actions.UpdateUserAttributes).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.UpdateUserAttributes).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.UpdateUserAttributes).toHaveBeenCalledTimes(1);
       });
     });
@@ -702,7 +702,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "VerifyUserAttribute" action with correct params - without "clientSecret"', async () => {
         await sut.verifyUserAttribute({ accessToken, attribute, code });
 
-        expect(Actions.VerifyUserAttribute).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret: undefined });
+        expect(Actions.VerifyUserAttribute).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret: undefined });
         expect(Actions.VerifyUserAttribute).toHaveBeenCalledTimes(1);
       });
 
@@ -713,7 +713,7 @@ describe('awsCognitoIdentityProvider', () => {
 
         await optionalSut.verifyUserAttribute({ accessToken, attribute, code });
 
-        expect(Actions.VerifyUserAttribute).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.VerifyUserAttribute).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.VerifyUserAttribute).toHaveBeenCalledTimes(1);
       });
     });
@@ -759,7 +759,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "ChangePassword" action with correct params', async () => {
         await sut.changePassword({ accessToken, oldPassword, newPassword });
 
-        expect(Actions.ChangePassword).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider) });
+        expect(Actions.ChangePassword).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider) });
         expect(Actions.ChangePassword).toHaveBeenCalledTimes(1);
       });
     });
@@ -809,7 +809,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "ForgotPassword" action with correct params - without "clientSecret"', async () => {
         await sut.forgotPassword({ username });
 
-        expect(Actions.ForgotPassword).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider) });
+        expect(Actions.ForgotPassword).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider) });
         expect(Actions.ForgotPassword).toHaveBeenCalledTimes(1);
       });
 
@@ -820,7 +820,7 @@ describe('awsCognitoIdentityProvider', () => {
 
         await optionalSut.forgotPassword({ username });
 
-        expect(Actions.ForgotPassword).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.ForgotPassword).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.ForgotPassword).toHaveBeenCalledTimes(1);
       });
     });
@@ -871,7 +871,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "ConfirmForgotPassword" action with correct params - without "clientSecret"', async () => {
         await sut.confirmForgotPassword({ username, newPassword, code });
 
-        expect(Actions.ConfirmForgotPassword).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider) });
+        expect(Actions.ConfirmForgotPassword).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider) });
         expect(Actions.ConfirmForgotPassword).toHaveBeenCalledTimes(1);
       });
 
@@ -882,7 +882,7 @@ describe('awsCognitoIdentityProvider', () => {
 
         await optionalSut.confirmForgotPassword({ username, newPassword, code });
 
-        expect(Actions.ConfirmForgotPassword).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.ConfirmForgotPassword).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.ConfirmForgotPassword).toHaveBeenCalledTimes(1);
       });
     });
@@ -928,7 +928,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "ToggleMFA" action with correct params', async () => {
         await sut.toggleMFA({ accessToken, enabled, preferred });
 
-        expect(Actions.ToggleMFA).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider) });
+        expect(Actions.ToggleMFA).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider) });
         expect(Actions.ToggleMFA).toHaveBeenCalledTimes(1);
       });
     });
@@ -970,7 +970,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "DeleteUser" action with correct params', async () => {
         await sut.deleteUser({ accessToken });
 
-        expect(Actions.DeleteUser).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider) });
+        expect(Actions.DeleteUser).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider) });
         expect(Actions.DeleteUser).toHaveBeenCalledTimes(1);
       });
     });
@@ -1018,7 +1018,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "GetUserAttributes" action with correct params', async () => {
         await sut.getUserAttributes({ accessToken });
 
-        expect(Actions.GetUserAttributes).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider) });
+        expect(Actions.GetUserAttributes).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider) });
         expect(Actions.GetUserAttributes).toHaveBeenCalledTimes(1);
       });
     });
@@ -1077,7 +1077,7 @@ describe('awsCognitoIdentityProvider', () => {
       it('should instantiate "RefreshToken" action with correct params - without "clientSecret"', async () => {
         await sut.refreshToken({ refreshToken: refreshTokenInput, sub });
 
-        expect(Actions.RefreshToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret: undefined });
+        expect(Actions.RefreshToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret: undefined });
         expect(Actions.RefreshToken).toHaveBeenCalledTimes(1);
       });
 
@@ -1088,7 +1088,7 @@ describe('awsCognitoIdentityProvider', () => {
 
         await optionalSut.refreshToken({ refreshToken: refreshTokenInput, sub });
 
-        expect(Actions.RefreshToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityServiceProvider), clientSecret });
+        expect(Actions.RefreshToken).toHaveBeenCalledWith({ clientId, cognitoInstance: expect.any(CognitoIdentityProvider), clientSecret });
         expect(Actions.RefreshToken).toHaveBeenCalledTimes(1);
       });
     });

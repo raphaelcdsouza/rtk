@@ -1,4 +1,4 @@
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { CognitoIdentityProvider, CognitoIdentityProviderClientConfig } from '@aws-sdk/client-cognito-identity-provider';
 
 import { AwsCognitoTemplate } from '../Templates/AWS';
 import * as Interfaces from '../../Interfaces/Gateways';
@@ -14,7 +14,7 @@ type AwsCognitoIdentityProviderConstructorParams = {
 
 type AwsCognitoIdentityProviderActionConstructorParams = {
   clientId: string;
-  cognitoInstance: CognitoIdentityServiceProvider;
+  cognitoInstance: CognitoIdentityProvider;
   clientSecret?: string;
 }
 
@@ -34,7 +34,7 @@ implements
   Interfaces.IToggleMFA,
   Interfaces.IDeleteUser,
   Interfaces.IGetUserAttributes {
-  private readonly cognitoInstance: CognitoIdentityServiceProvider;
+  private readonly cognitoInstance: CognitoIdentityProvider;
 
   private readonly clientId: string;
 
@@ -43,7 +43,7 @@ implements
   constructor({
     region, accessKeyId, secretAccessKey, clientId, clientSecret,
   }: AwsCognitoIdentityProviderConstructorParams) {
-    let credentials: CognitoIdentityServiceProvider.ClientConfiguration['credentials'];
+    let credentials: CognitoIdentityProviderClientConfig['credentials'];
 
     if (accessKeyId !== undefined && secretAccessKey !== undefined) {
       credentials = {
@@ -52,7 +52,7 @@ implements
       };
     }
 
-    this.cognitoInstance = new CognitoIdentityServiceProvider({
+    this.cognitoInstance = new CognitoIdentityProvider({
       region,
       credentials,
     });
