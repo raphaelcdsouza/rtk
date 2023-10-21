@@ -1,14 +1,14 @@
 import { Readable } from 'stream';
 
 export interface IRetrieveFile {
-  retrieveFileFromStream: (params: IRetrieveFile.Input) => Promise<Readable>
-  retrieveFile: (params: IRetrieveFile.Input) => Promise<Buffer>
+  retrieveFile: (params: IRetrieveFile.Input) => Promise<IRetrieveFile.Input['type'] extends 'buffer' ? Buffer : ReadableStream>
 }
 
 export namespace IRetrieveFile {
   export type Input = {
     key: string
     bucketName: string
+    type: 'buffer' | 'stream'
   }
 }
 
